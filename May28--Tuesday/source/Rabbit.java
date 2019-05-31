@@ -10,7 +10,7 @@ public class Rabbit extends Animal {
 
     private static final int S_R = 2;
     private static int quadrant;
-
+    // public static int sigsafe = 0;
 
     private int goSafePlace(){
 	//rows and cols = 20
@@ -205,14 +205,164 @@ public class Rabbit extends Animal {
 	else if (count < 1 && count >=5)
 	    return Model.STAY; //give up and die
 
-        
+  
 	return Model.STAY;
 	
     }
 
     private int escape(){
+	int foxdir = 1000;
+	for (int i = 0; i<8; i++)
+	    if (look(i) == Model.FOX)
+		foxdir = i;   
+        
 	
+	int[] arrlegal = {0,0,0,0,0,0,0,0};
+	for (int i=0; i<8; i++){
+	    if(canMove(i)){
+		arrlegal[i] = 1;
+	    }
+	}
+
+	for(int i = 0; i < 8; i+=2){
+		
+	    if((look(i) == Model.BUSH) && !(canMove(i))){
+		switch (i){
+		case Model.N:
+		  
+		    if(canMove(Model.NE)){
+			arrlegal[Model.NE] = 2;
+		    }
+		    
+		    if(canMove(Model.NW)){
+			arrlegal[Model.NW] = 2;
+		    }
+		    
+		    arrlegal[Model.SE] = 0;
+		    arrlegal[Model.SW] = 0;
+		    arrlegal[Model.S] = 0;
+
+		    break;
+		    
+		case Model.E:
+		
+		    if(canMove(Model.NE)){
+			arrlegal[Model.NE] = 2;
+		    }
+
+		    if(canMove(Model.SE)){
+			arrlegal[Model.SE] = 2;
+		    }
+
+		    arrlegal[Model.NW] = 0;
+		    arrlegal[Model.SW] = 0;
+		    arrlegal[Model.W] = 0;
+		    break;
+
+		case Model.S:
+		   
+		    if(canMove(Model.SW)){
+			arrlegal[Model.SW] = 2;
+		    }
+
+		    if (canMove(Model.SE)){
+			arrlegal[Model.SE] = 2;
+		    }
+
+		    arrlegal[Model.NE] = 0;
+		    arrlegal[Model.NW] = 0;
+		    arrlegal[Model.N] = 0;
+		    break;
+
+		case Model.W:
+		
+		    if(canMove(Model.NW)){
+			arrlegal[Model.NW] = 2;
+		    }
+		    if(canMove(Model.SW)){
+			arrlegal[Model.SW] = 2;
+		    }
+
+		    arrlegal[Model.NE] = 0;
+		    arrlegal[Model.SE] = 0;
+		    arrlegal[Model.E] = 0;
+		    break;
+		}
+	    }
+	}
+    
+
+	arrlegal[foxdir] = 0;
+		
+	switch (foxdir){
+
+	case Model.N:
+	    arrlegal[Model.W] = 0;
+	    arrlegal[Model.E] = 0;
+	    arrlegal[Model.NE] = 0;
+	    arrlegal[Model.NW] = 0;
+	    break;
+
+	case Model.NE:
+	    arrlegal[Model.N] = 0;
+	    arrlegal[Model.E] = 0;
+	    break;
+
+	case Model.E:
+	    arrlegal[Model.N] = 0;
+	    arrlegal[Model.S] = 0;
+	    arrlegal[Model.NE] = 0;
+	    arrlegal[Model.SE] = 0;
+	    break;
+
+	case Model.SE:
+	    arrlegal[Model.S] = 0;
+	    arrlegal[Model.E] = 0;
+	    break;
+
+	case Model.S:
+	    arrlegal[Model.E] = 0;
+	    arrlegal[Model.W] = 0;
+	    arrlegal[Model.SE] = 0;
+	    arrlegal[Model.SW] = 0;
+	    break;
+
+	case Model.SW:
+	    arrlegal[Model.S] = 0;
+	    arrlegal[Model.W] = 0;
+	    break;
+
+	case Model.W:
+	    arrlegal[Model.N] = 0;
+	    arrlegal[Model.S] = 0;
+	    arrlegal[Model.NW] = 0;
+	    arrlegal[Model.SW] = 0;
+	    break;
+
+	case Model.NW:
+	    arrlegal[Model.N] = 0;
+	    arrlegal[Model.W] = 0;
+	    break;
+	}
+		    
+
+	for(int i = 0; i < 8; i++){
+	    if (arrlegal[i] == 2){
+		return i;
+	    }
+	}
+
+	for(int i = 0; i < 8; i++){
+	    if (arrlegal[i] == 1){
+		return i;
+	    }
+	}
+
+	return Model.STAY;
+		    
     }
+		
+    
     
     int decideMove(){
 
@@ -220,13 +370,15 @@ public class Rabbit extends Animal {
 	
 	for(int i = 0; i < 8; i++)
 	    if(look(i) == Model.FOX)
-	    dist = distance(i) - 1;
+		dist = distance(i) - 1;
 
-	if (dist == 0)
-	    return escape(); 
+	if (dist == 0){
+	    return escape();
+	}
 	
 	
 	return goSafePlace();
+	
 	
 	//System.out.println(sigsafe);
 	
@@ -234,3 +386,4 @@ public class Rabbit extends Animal {
 	
     }
 }
+
