@@ -64,20 +64,19 @@ public class assign2{
 	int countA, countB;
 	for(int i = 0; i < size; i++){
 	    countA = countB = 0;
-	    for(int j = 0; j < size; j++){
+	    for(int j = 0; j < size; j++){	       
 		    if(a.get(i).equals(a.get(j))){
 			countA++;
 		    }
 		
 	    }
-
 	    for(int k = 0; k < size; k++){
 		if(a.get(i).equals(b.get(k))){
 		    countB++;
 		}
 	    }
 
-	    if(b != a){
+	    if(countA != countB){
 		return false;
 	    }
 	}
@@ -117,7 +116,7 @@ public class assign2{
 
     public static void main(String[] args){
 
-	/* */
+	/* 
 
 	LinkedList <String> myList = new LinkedList<String>();
 
@@ -142,6 +141,7 @@ public class assign2{
 	List<String> retStr = allStringsOfSize(myList, 5);
 	//	for(int i = 0; i < retStr.size(); i++)
 	//  System.out.println(retStr.get(i));
+
 	
 	System.out.println(isPermutation(myList, retStr));
 
@@ -157,8 +157,27 @@ public class assign2{
 	for(int i = 0; i < intList.size(); i++){
 	    System.out.println(intList.get(i));
 	}
+	*/
+
 	
-	
+	LinkedList<Integer> ListA = new LinkedList<>();
+	LinkedList<Integer> ListB = new LinkedList<>();
+
+	ListA.add(1);
+	ListA.add(2);
+	ListA.add(3);
+	ListA.add(4);
+	ListA.add(5);
+	ListA.add(5);
+
+	ListB.add(1);
+	ListB.add(2);
+	ListB.add(2);
+	ListB.add(3);
+	ListB.add(4);
+	ListB.add(5);
+
+	System.out.println(isPermutation(ListA, ListB));
 	
     }
     
