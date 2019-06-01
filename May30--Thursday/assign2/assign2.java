@@ -167,7 +167,7 @@ public class assign2{
 	ListA.add(2);
 	ListA.add(3);
 	ListA.add(4);
-	ListA.add(5);
+	ListA.add(2);
 	ListA.add(5);
 
 	ListB.add(1);
