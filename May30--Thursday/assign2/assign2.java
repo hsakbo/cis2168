@@ -15,10 +15,10 @@ public class assign2{
 	}
 
 	return true;
-	
+	//time complexity n^2
     }
     
-    public static <Integer> List<Integer> allMultiples(List <Integer> list, int m){
+    public static List<Integer> allMultiples(List <Integer> list, int m){
 
 	List<Integer> retList = new LinkedList<Integer>();
 	int temp;
@@ -35,7 +35,7 @@ public class assign2{
 	    }
 
 	return retList;
-	
+	//time complexity O(n)
     }
     
     
@@ -51,6 +51,7 @@ public class assign2{
 	}
 
 	return retList;
+	//time complexity O(n)
     }
 
     public static <E> boolean isPermutation(List<E> a, List<E> b){
@@ -82,6 +83,7 @@ public class assign2{
 	}
 
 	return true;
+	//time complexity O(n^2)
     }
 			
     public static List<String> stringToListOfWords(String str){
@@ -95,7 +97,7 @@ public class assign2{
 		
 	    retList.add(sanitized[i]);
 	}
-
+	//time complexity O(n)
 	return retList;
     }
 
@@ -107,7 +109,7 @@ public class assign2{
 		i--;
 	    }
 	}
-
+	//time complexity O(n)
 	return;
     }
 
@@ -116,7 +118,7 @@ public class assign2{
 
     public static void main(String[] args){
 
-	/* 
+	/*
 
 	LinkedList <String> myList = new LinkedList<String>();
 
@@ -131,7 +133,7 @@ public class assign2{
 	    intList.add(i);
 	}
 
-	List <Integer> retInt = allMultiples(intList, 2);
+
 	
 	//	for(int i = 0; i < retInt.size(); i++)
 	//  System.out.println(retInt.get(i));
@@ -144,40 +146,12 @@ public class assign2{
 
 	
 	System.out.println(isPermutation(myList, retStr));
-
-	String go = "Hello, my name is Jeff1. Who are you?Compound-word pass 2.5"; //will split decimals from integer
-	retStr = stringToListOfWords(go);
-	//	for(int i = 0; i < retStr.size(); i++)
-	//  System.out.println(retStr.get(i));
-
-	removeAllInstances(intList, 2);
-	removeAllInstances(intList, 3);
-	intList.add(9);
-	removeAllInstances(intList, 9);
-	for(int i = 0; i < intList.size(); i++){
-	    System.out.println(intList.get(i));
-	}
 	*/
-
-	
-	LinkedList<Integer> ListA = new LinkedList<>();
-	LinkedList<Integer> ListB = new LinkedList<>();
-
-	ListA.add(1);
-	ListA.add(2);
-	ListA.add(3);
-	ListA.add(4);
-	ListA.add(2);
-	ListA.add(5);
-
-	ListB.add(1);
-	ListB.add(2);
-	ListB.add(2);
-	ListB.add(3);
-	ListB.add(4);
-	ListB.add(5);
-
-	System.out.println(isPermutation(ListA, ListB));
+	List <String> retStr = new ArrayList();
+	String go = "Hello, \"my\" name is Jeff1. Who are you?Compound-word pass 2.5"; //will split decimals from integer
+	retStr = stringToListOfWords(go);
+		for(int i = 0; i < retStr.size(); i++)
+	  System.out.println(retStr.get(i));
 	
     }
     

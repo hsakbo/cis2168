@@ -52,7 +52,8 @@ public class hello{
 	//3n(n-1) /2
 	//inner loop
 	//T(n^2) = 3n^2/2
-	//O(n^2)
+	//O(n^2)x
+
 	
     }
 
