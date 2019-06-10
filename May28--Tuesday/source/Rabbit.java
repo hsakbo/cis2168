@@ -70,7 +70,7 @@ public class Rabbit extends Animal {
 	dir = Model.STAY;
 	for(int i = 0; i < 8; i++)
 	    if(look(i) == Model.BUSH)
-		if(distance(i) < bushLen)
+		if(distance(i)-1 < bushLen)
 		    {
 			bushLen = distance(i) -1;
 			dir = i;
@@ -102,6 +102,7 @@ public class Rabbit extends Animal {
 	return dir;
     }
 
+    
     private int parking(int dir){
 	int tempV1, tempV2;
 	int count = 0;
@@ -116,7 +117,7 @@ public class Rabbit extends Animal {
 		tempV1 = look(Model.NE);
 		tempV2 = look(Model.NW);
 
-		if((tempV1 == Model.BUSH) && (tempV2 == Model.BUSH))
+		if((tempV1 == Model.BUSH) && (tempV2 == Model.BUSH) && !canMove(Model.NE) && !canMove(Model.NW))
 		    {
 			if (canMove(Model.E))
 			    return Model.E;
@@ -139,7 +140,7 @@ public class Rabbit extends Animal {
 	    case Model.E:
 		tempV1 = look(Model.NE);
 		tempV2 = look(Model.SE);
-		if((tempV1 == Model.BUSH) && (tempV2 == Model.BUSH))
+		if((tempV1 == Model.BUSH) && (tempV2 == Model.BUSH) && !canMove(Model.NE) && !canMove(Model.SE))
 		    {
 		    
 
@@ -161,7 +162,7 @@ public class Rabbit extends Animal {
 		tempV1 = look(Model.SE);
 		tempV2 = look(Model.SW);
 
-		if((tempV1 == Model.BUSH) && (tempV2 == Model.BUSH))
+		if((tempV1 == Model.BUSH) && (tempV2 == Model.BUSH) && !canMove(Model.SE) && !canMove(Model.SW))
 		    {
 			if (canMove(Model.E))
 			    return Model.E;
@@ -181,7 +182,7 @@ public class Rabbit extends Animal {
 		tempV1 = look(Model.NW);
 		tempV2 = look(Model.SW);
 
-		if((tempV1 == Model.BUSH) && (tempV2 == Model.BUSH))
+		if((tempV1 == Model.BUSH) && (tempV2 == Model.BUSH) && !canMove(Model.NW) && !canMove(Model.SW))
 		    {
 			if (canMove(Model.N))
 			    return Model.N;
@@ -209,6 +210,8 @@ public class Rabbit extends Animal {
 	return Model.STAY;
 	
     }
+
+    
 
     private int escape(){
 	int foxdir = 1000;
