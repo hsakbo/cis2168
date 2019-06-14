@@ -20,7 +20,7 @@ public class assign2{
     
     public static List<Integer> allMultiples(List <Integer> list, int m){
 
-	List<Integer> retList = new LinkedList<Integer>();
+	List<Integer> retList = new ArrayList<Integer>();
 	int temp;
 	for(int i = 0; i < list.size(); i++)
 	    {
@@ -41,7 +41,7 @@ public class assign2{
     
     public static List<String> allStringsOfSize(List<String> list, int length){
 
-	List<String> retList = new LinkedList<String>();
+	List<String> retList = new ArrayList<String>();
 	String temp;
 	for(int i = 0; i < list.size(); i++){
 	    temp = list.get(i);
@@ -120,14 +120,14 @@ public class assign2{
 
 	/*
 
-	LinkedList <String> myList = new LinkedList<String>();
+	ArrayList <String> myList = new ArrayList<String>();
 
 	myList.add("Hello");
 	myList.add(" ");
 	myList.add("World");
 	myList.add(" ");
 
-	LinkedList <Integer> intList = new LinkedList<Integer>();
+	ArrayList <Integer> intList = new ArrayList<Integer>();
 	
 	for(int i = 0; i < 10; i++){
 	    intList.add(i);

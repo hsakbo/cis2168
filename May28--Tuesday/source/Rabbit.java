@@ -218,7 +218,7 @@ public class Rabbit extends Animal {
 	for (int i = 0; i<8; i++)
 	    if (look(i) == Model.FOX)
 		foxdir = i;   
-        
+        if(foxdir == 1000) return Model.STAY;
 	
 	int[] arrlegal = {0,0,0,0,0,0,0,0};
 	for (int i=0; i<8; i++){
@@ -368,14 +368,14 @@ public class Rabbit extends Animal {
     
     
     int decideMove(){
-
-	int dist = 1;
+	
+	int dist = 100;
 	
 	for(int i = 0; i < 8; i++)
 	    if(look(i) == Model.FOX)
 		dist = distance(i) - 1;
-
-	if (dist == 0){
+        
+	if (dist < 3){
 	    return escape();
 	}
 	
@@ -386,7 +386,6 @@ public class Rabbit extends Animal {
 	//System.out.println(sigsafe);
 	
 	//return random(Model.MIN_DIRECTION, Model.MAX_DIRECTION);
-	
     }
 }
 

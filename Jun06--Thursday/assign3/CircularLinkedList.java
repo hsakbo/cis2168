@@ -6,11 +6,13 @@ public class CircularLinkedList<E> implements Iterable<E> {
 	
 	
     // Your variables
-    int soldier, lot;
+    
     Node<E> head;
     Node<E> tail;
-    int size;  // BE SURE TO KEEP TRACK OF THE SIZE
+    static int size = 0;  // BE SURE TO KEEP TRACK OF THE SIZE
 
+
+        
 	
     // implement this constructor
 	
@@ -21,22 +23,48 @@ public class CircularLinkedList<E> implements Iterable<E> {
     // I highly recommend using this helper method
     // Return Node<E> found at the specified index
     // be sure to handle out of bounds cases
-    private Node<E> getNode(int index ) {
+    private Node<E> getNode(int index) {
+	if(size == 0){
+	    return null;
+	}
 
-	return null;
+	else{
+	    if (index > size)
+		throw new IndexOutOfBoundsException(index);
+		
+	    Node<E> tmp = head;
+	    for(int i = 0; i < index; i++){
+		tmp = tmp.next;
+	    }
+	    return tmp;
+	}
     }
 
-
     // attach a node to the end of the list
-    public boolean add(E item) {
-	this.add(size,item);
-	return false;
+    public void add(E item) {
+	if(size >= 1){
+	    Node<E> tmp = getNode(size-1);
+	    Node<E> newNode = new Node<E>(item);
+	    size++;
+	    newNode.next = head;
+	    tmp.next = newNode;
+	    tail = newNode;
+	}
+
+	else{
+	    Node<E> newNode = new Node<E>(item);
+	    size = 1;
+	    newNode.next = head = tail = newNode;
+	}
+	
 
     }
 
 	
     // Cases to handle
-    // out of bounds
+    // out of bounds : getNode will throw exception.
+    //will ignore the index if not initialized.
+    
     // adding to empty list
     // adding to front
     // adding to "end"
@@ -44,6 +72,25 @@ public class CircularLinkedList<E> implements Iterable<E> {
     // REMEMBER TO INCREMENT THE SIZE
     public void add(int index, E item){
 
+	if(size >= 1){
+	    
+	    Node<E> tmp = getNode(index -1);
+	    Node<E> newNode = new Node<E>(item);
+	    newNode.next = tmp.next;
+	    tmp.next = newNode;
+	    size++;
+	    if(index == size-1){
+		tail = newNode;
+	    }
+	}
+
+	else{
+	    Node<E> newNode = new Node<E>(item);
+	    newNode.next = newNode;
+	    size = 1;
+	    head = tail = newNode;
+	}
+	
     }
 
 	
@@ -58,6 +105,37 @@ public class CircularLinkedList<E> implements Iterable<E> {
     // removing any other node
     // REMEMBER TO DECREMENT THE SIZE
     public E remove(int index) {
+
+	
+	if(size != 0)
+	    switch(index){
+
+	    case 0:
+		Node<E> tmp1 = head;
+		head = head.next;
+		tail.next = head;
+		size--;
+		return tmp1.item;
+	
+	
+	    default:
+		if(index == size -1){
+
+		    getNode(size-2).next = head;
+		    Node<E> tmp2 = tail;
+		    tail = getNode(size-2);
+		    size--;
+		    return tmp2.item;
+		}
+		
+		Node<E> tmp3 = getNode(index-1);
+		Node<E> retVal = tmp3.next;
+		tmp3.next = tmp3.next.next;
+		size--;
+		return retVal.item;
+	    
+	    }
+	
 	return null;
     }
 	
@@ -161,8 +239,29 @@ public class CircularLinkedList<E> implements Iterable<E> {
     public static void main(String[] args){
 	CircularLinkedList<Integer> nel = new CircularLinkedList<Integer>();
 
-	System.out.println("hello");
+	int k = 200;
+	System.out.printf("k val: %d\n", k);
+	for(int i = 0; i < 10; i++)
+	    nel.add(i + 1);
 	
+	System.out.printf("%s\n", nel.toString());
+
+	
+	Iterator<Integer> mainLoop;
+	
+	    
+	for(int i = 0; i < 10; i++){
+
+	    mainLoop = nel.iterator();
+	    for(int j = 0; j < k; j++){
+		mainLoop.next();
+	    }
+	    mainLoop.remove();
+	    System.out.printf("%s\n", nel.toString());
+	}
+       
+
+
 
     }
 	
