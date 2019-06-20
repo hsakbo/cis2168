@@ -17,7 +17,7 @@ public class MazeGridPanel extends JPanel{
 
     // extra credit
     public void genDFSMaze() {
-	boolean[][] visited;
+	//boolean[][] visited;
 	Stack<Cell> stack  = new Stack<Cell>();
 	Cell start = maze[0][0];
 	stack.push(start);
@@ -33,24 +33,25 @@ public class MazeGridPanel extends JPanel{
 	//stack.push(start);
 	int visited[][] = new int[rows][cols]; //boolean array for visit check.
 
-	//Must protect C
+	//Must... protect... C!!
         //for(int i = 0; i < rows; i++) 
 	//    for(int j = 0; j < cols; j++)
 	//	visited[i][j] = 0;
 
-	//I am going to use x and y coordinates instead of transporting the whole array.
+	//I am going to use x and y coordinates in an array instead of storing cell objects.
 	visited[0][0] = 1;
 	int x, y;
 	x = y = 0;
 	Stack<int[]> pos = new Stack<int[]>();
 	int[] arr = {x, y};
 	int[] cloning;
-	
+
 	
 	while(visited[rows-1][cols-1] != 1){
 
 	    cloning = arr.clone();
 	    pos.push(cloning);
+
 	    
 	    try{
 		Thread.sleep(5);
@@ -62,7 +63,7 @@ public class MazeGridPanel extends JPanel{
 	    
 	    
 	    //east
-	    if((x+1 < cols) && !maze[y][x].eastWall && visited[y][x+1] != 1){
+	    if((x+1 < cols) && !maze[y][x].eastWall && visited[y][x+1] != 1){//relying on optimization, else this will throw out of bound exception. first boolean false should resolve the if stack as false without checking the rest.
 		
 		maze[y][x].setBackground(Color.BLUE);
 		maze[y][++x].setBackground(Color.GREEN);
@@ -122,14 +123,14 @@ public class MazeGridPanel extends JPanel{
 		maze[y][x].setBackground(Color.GREEN);
 		pos.pop();
 
-	    }
+		//logically these 2 steps are needed but due to the nature of the if statements they are irrelevant.
+		//arr[0] = x;
+		//arr[1] = y;
 
-
-	    
+	    } 
 	}
 
-	maze[0][0].setBackground(Color.YELLOW);
-	   
+	maze[0][0].setBackground(Color.YELLOW); 
 
     }
 
@@ -188,7 +189,6 @@ public class MazeGridPanel extends JPanel{
 	this.genNWMaze();
 
 
-		
     }
 
 
