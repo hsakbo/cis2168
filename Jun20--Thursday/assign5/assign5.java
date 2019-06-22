@@ -161,13 +161,14 @@ public class assign5{
 
 	if(x != 0 && y != 0){
 	    
-	    for(int i = ymult; i < 3*(ymult+1); i++){	
-		for(int j = xmult; j < 3*(xmult+1); j++){
+	    for(int i = ymult*3; i < 3*(ymult+1); i++){	
+		for(int j = xmult*3; j < 3*(xmult+1); j++){
 		    if(i == y && j == x)
 			continue;
 
 		    else if(puzzle[i][j] == puzzle[y][x])
 			return null;
+		    
 		}
 	    }
 	}
@@ -182,8 +183,9 @@ public class assign5{
 		    continue;
 	    
 		else if(puzzle[y][i] == puzzle[y][x])
-		    return null;
 	
+		    return null;
+		
 	    }
 	}
 	//**********end column check**************
@@ -196,7 +198,10 @@ public class assign5{
 		    continue;
 
 		else if(puzzle[i][x] == puzzle[y][x])
+		    
+		    
 		    return null;
+		
 	    }
 	}
 	//**********end row checks****************
@@ -221,30 +226,34 @@ public class assign5{
 
 	
 	for(; i < 9; i++){
-	    
-	    for(; j < 9; j++){
+       	    for(; j < 9; j++){
 		if(puzzle[i][j] == 0){
 		    for(int k = 1; k <= 9; k++){
 			if(solStatus == 0) {
 			    puzzle[i][j] = k;
 			    solveSudoku(puzzle, j, i);
-			    puzzle[i][j] = 0;
+			    //puzzle[i][j] = -1;
 			}
 			if(solStatus != 0)
 			    return solArr;
-			    
 		    }
 		}		
+		if(solStatus != 0)
+		    return solArr;
 	    }
 	    j = 0;
+	    if(solStatus != 0)
+		return solArr;
 	}
-	
-	if(solStatus == 0){
-	solStatus++;
+
+	if(solStatus != 0)
+	    return solArr;
+
+
+
+	solStatus = 1;
 	solArr = puzzle;
-	}
-	
-	return solArr;
+	return puzzle;
 	
     }
     
