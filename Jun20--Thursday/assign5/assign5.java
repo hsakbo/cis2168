@@ -257,8 +257,33 @@ public class assign5{
     */
 
     
-    public static boolean checkBox(int[][] puzzle, int x, int y){
 
+    //finds the legal status of a digit for the sudoku puzzle.
+    public static boolean checker(int[][] puzzle, int x, int y){
+
+	//checks the row (x axis)
+	for(int i = 0; i < 9; i++){
+	    if(i == x)
+		continue;
+	    
+	    else if(puzzle[y][i] == puzzle[y][x])
+		return false;
+		
+	}
+
+
+	//checks the column (y xis)
+	for(int i = 0; i < 9; i++){
+	    if(i == y)
+		continue;
+	    
+	    else if(puzzle[i][x] == puzzle[y][x])
+		return false;
+		
+	}
+
+
+	//checks the box
 	int xmult, ymult;
 	xmult = x / 3;
 	ymult = y / 3;
@@ -273,37 +298,14 @@ public class assign5{
 		    
 	    }
 	}
-	return true;
-    }
-
-    public static boolean checkRow(int[][] puzzle, int x, int y){
-	for(int i = 0; i < 9; i++){
-	    if(i == x)
-		continue;
-	    
-	    else if(puzzle[y][i] == puzzle[y][x])
-		return false;
-		
-	}
 
 	return true;
     }
 
-    public static boolean checkCol(int[][] puzzle, int x, int y){
 
-	for(int i = 0; i < 9; i++){
-	    if(i == y)
-		continue;
-	    
-	    else if(puzzle[i][x] == puzzle[y][x])
-		return false;
-		
-	}
-	return true;
-    }
 
     
-    //psuedocode: (PLAN: null means a fail condition)
+    //psuedocode: (PLAN: null means a backtrack condition)
     //find the nearest 0 and make a loop that iterates 1 to 9 (k loop)
     //*************************THE K LOOP******************************
     //assign that value to the current index, and check if it is legal.
@@ -347,10 +349,8 @@ public class assign5{
 			puzzle[i][j] = k;
 
 			//continue to next ++k if illegal
-			if(!checkCol(puzzle, j, i))    {continue;}			
-			if(!checkRow(puzzle, j, i))    {continue;}
-			if(!checkBox(puzzle, j, i))    {continue;} //the order matters for (miniscule) speed.
-			
+			if(!checker(puzzle, j, i))
+			    continue;
 			
 
 			//IMPORTANT: this is the recursion loop.		
@@ -389,7 +389,7 @@ public class assign5{
 		    }
 		    
 		    //After k loop is done, which it will only end if all 9 iterations are continued, then:
-		    puzzle[i][j] = 0; //I don't understand this line, need help in explaining this...
+		    puzzle[i][j] = 0; //subtle pointer logic... I H4T3 J4V4:.]:@.:\,.:/"QUNHOh2e2rq29j
 		    return null;
 
 		} // <-- end of if(puzzle[i][j] == 0)...
@@ -412,7 +412,7 @@ public class assign5{
 
 
 	//actual puzzle:
-	//puzzle[0][0] = 6;
+	
 	puzzle[0][2] = 6;
 	puzzle[0][3] = 2;
 	puzzle[0][4] = 5;
@@ -457,8 +457,11 @@ public class assign5{
 
 	//suggest (0, 0) coordinates
 	//also ignore my x and y. This goes like wrapKnight(y, x)
-	//wrapKnight(0, 0);
+	//wrapKnight(1, 0);
 
+
+	//the wrap is a little unnecesary as my expSudoku1 method is capable of solving any sudoku puzzle.
+	//use: expSudoku1(puzzle, 0, 0). (the puzzle is a int[][] array that starts from top left).
 	wrapSudoku();
 	
 
