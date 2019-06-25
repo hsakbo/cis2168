@@ -1,22 +1,13 @@
+import java.awt.Desktop;
+import java.io.*;
+import java.util.*;
+import java.lang.*;
+
+
 public class assign5{
     //Knight one, board x axis starts from 0 and from top left. y axis starts from top left from 0.
 
     static int order;
-    //static int solStatus;
-    //static int[][] solArr;
-    
-    /* LOL try using this instead of if(order == 64)
-       public static boolean checkVisit(int[][] visited){
-
-       for(int i = 0; i < 8; i++)
-       for(int j = 0; j < 8; j++)
-       if(visited[i][j] == 0)
-       return false;
-
-       return true;
-	
-       }
-    */
     
     public static int[][] recurseKnight(int[][] visited, int x, int y){
 
@@ -150,111 +141,6 @@ public class assign5{
 	System.out.printf("\n");
     }
 
-    /* Troublesome code.
-      public static int[][] solveSudoku(int[][] puzzle, int x,int y){
-
-
-	
-      int xmult, ymult;
-      xmult = x / 3;
-      ymult = y / 3;
-
-
-
-      //I know this is cheating, the if condition to bypass the very first check so that the recursion initializes, but this is experimental.
-      //I will try to make a better loop which can scale well with no matter where you begin and no reliance on global variables...
-      if(puzzle[0][0] != 0){
-
-      //******start box check**********
-      for(int i = ymult*3; i < 3*(ymult+1); i++){	
-      for(int j = xmult*3; j < 3*(xmult+1); j++){
-      if(i == y && j == x)
-      continue;
-
-      else if(puzzle[i][j] == puzzle[y][x])
-      return null;
-		    
-      }
-      }
-      //*********box check clear********
-
-
-      //*********start column(x axis) check*****
-      for(int i = 0; i < 9; i++){
-      if(i == x)
-      continue;
-	    
-      else if(puzzle[y][i] == puzzle[y][x])
-      return null;
-		
-      }	
-      //**********end column check**************
-
-
-	    
-      //**********start row check (y axis)******
-      for(int i = 0; i < 9; i++){
-      if(i == y)
-      continue;
-
-      else if(puzzle[i][x] == puzzle[y][x])
-      return null;
-		
-      }
-      }
-      //**********end row checks****************
-
-	
-      int i, j;
-      if(x != 0 && y != 0){
-      i = y;
-      if(x+1 > 8){
-      i = y+1;
-      j = 0;
-      }
-
-      else
-      j = x+1;
-      }
-      else{
-      i = 0;
-      j = 0;
-      }
-	
-
-	
-      for(; i < 9; i++){
-      for(; j < 9; j++){
-      if(puzzle[i][j] == 0){
-      for(int k = 1; k <= 9; k++){
-      if(solStatus == 0) {
-      puzzle[i][j] = k;
-      solveSudoku(puzzle, j, i);
-      //printPuzzle(puzzle);
-      }
-      if(solStatus != 0)
-      return solArr;
-      }
-      if(solStatus == 0)
-      return null;
-      }				
-      }
-      j = 0;
-	    
-	
-      }
-
-      if(solStatus != 0)
-      return solArr;
-
-
-
-      solStatus = 1;
-      solArr = puzzle;
-      return puzzle;
-	
-      }
-    */
 
     
 
@@ -304,7 +190,7 @@ public class assign5{
 
 
 
-    
+    //q2: this algorithm is fast!
     //psuedocode: (PLAN: null means a backtrack condition)
     //find the nearest 0 and make a loop that iterates 1 to 9 (k loop)
     //*************************THE K LOOP******************************
@@ -315,7 +201,7 @@ public class assign5{
     //else return the successful 2d array (the domino return).
 
     //The final check of puzzle completion can be done with a simple trick.
-    //the check (if condition) should be placed below the recursion loop. This is because the recursion loop will not execute
+    //the check (if condition) should be placed below the recursion loop.
     //when the call is with (8, 8) and will die due to natural conditions. We can use this here for our check by making a
     //distinction between a normal and an abnormal exit from the recursion loop. I do this by saving the loop variable (nRow,
     //nCol) outside of the for statement, thereby preserving their last values. The conditions are: 9 for natural (8+1 < 9==
@@ -345,7 +231,7 @@ public class assign5{
 		    //IMPORTANT: this will be called the k loop. 
 		    for(int k = 1; k <= 9; k++){
 
-			//the assignment of k to the puzzle[i][j] which is 0.
+			//the assignment of k to the puzzle[i][j] which is 0. (from 1 to 9 recursively)
 			puzzle[i][j] = k;
 
 			//continue to next ++k if illegal
@@ -385,7 +271,7 @@ public class assign5{
 			    return puzzle;
 
 			
-		    //k loop ends here
+			//k loop ends here
 		    }
 		    
 		    //After k loop is done, which it will only end if all 9 iterations are continued, then:
@@ -403,67 +289,197 @@ public class assign5{
 	return null;
     
     }
-    
-    
-    public static void wrapSudoku(){
-
-	int[][] puzzle = new int[9][9];
 
 
 
-	//actual puzzle:
+    //this is even more faster with the removal of unnecesary for loops
+    //the initial conditions are refactored into a different method which is called by the wrapper exp2sudoWrap()
+
+    //static int count;
+    public static int[][] expSudoku2(int[][] puzzle, int x, int y){
 	
-	puzzle[0][2] = 6;
-	puzzle[0][3] = 2;
-	puzzle[0][4] = 5;
-	puzzle[0][8] = 7;
-	puzzle[1][1] = 4;
-	puzzle[1][5] = 9;
-	puzzle[2][2] = 8;
-	puzzle[2][8] = 9;
-	puzzle[3][0] = 4;
-	puzzle[3][1] = 8;
-	puzzle[3][5] = 1;
-	puzzle[3][7] = 5;
-	puzzle[4][2] = 3;
-	puzzle[4][6] = 9;
-	puzzle[5][1] = 6;
-	puzzle[5][3] = 5;
-	puzzle[5][7] = 2;
-	puzzle[5][8] = 1;
-	puzzle[6][0] = 6;
-	puzzle[6][6] = 1;
-	puzzle[7][3] = 1;
-	puzzle[7][7] = 6;
-	puzzle[8][0] = 2;
-	puzzle[8][4] = 3;
-	puzzle[8][5] = 7;
-	puzzle[8][6] = 5;
-
+	//System.out.printf("%d x:%d y%d\n", ++count, x, y);
+	//printPuzzle(puzzle);
+	int nRow, nCol;
 	
-       	System.out.printf("\nSource: https://www.websudoku.com/?level=4\n\n\t\tUnsolved Sudoku Puzzle:\n\n");
-	printPuzzle(puzzle);
+	
+	int[][] voidCheck = null;
 
-       	System.out.printf("\n\t\tSolved Sudoku Puzzle:\n\n");
-	int[][] solution = expSudoku1(puzzle, 0, 0);
-	printPuzzle(solution);
+       
+	for(int k = 1; k <= 9; k++){
+
+	    //System.out.printf("aa\n");
+	    puzzle[y][x] = k;
+	    if(!checker(puzzle, x, y))
+		continue;
+
 	    
+	    nCol = x;
+	    for(nRow = y; nRow < 9; nRow++){
+		for(; nCol < 9; nCol++){		    
+		    if(puzzle[nRow][nCol] == 0){
+
+			voidCheck = expSudoku2(puzzle, nCol, nRow);
+			if(voidCheck != null)
+			    return voidCheck;
+
+			else{
+					
+			    nRow = 100;
+			    nCol = 100;
+			}	
+		    }
+		}
+		nCol = 0;
+	    }
+	    if(nRow == 9)
+		return puzzle;					    
+	}
+		    		    
+	puzzle[y][x] = 0;
+	//System.out.printf("a\n");
+	return null;
+    
     }
 
+    //finds initial 0.
+    public static int[] initxy(int[][] puzzle){
+
+	int[] retArr = {0, 0};
+	for(int i = 0; i < 9; i++)
+	    for(int j = 0; j < 9; j++)
+		if(puzzle[i][j] == 0){
+		    retArr[0] = j;
+		    retArr[1] = i;
+		    return retArr;
+		}
+
+	return retArr;
+		    
 	
+    }
+
+    //wrapper for much faster solution.
+    public static void exp2sudoWrap(int[][] usrPuzzle){
+	
+	if(usrPuzzle == null){
+	    int[][] puzzle = new int[9][9];
+	    int[][] puzzle2 = new int[9][9];
+
+	    //puzzle[0][0] = 3;
+	    puzzle[0][2] = 6; puzzle2[0][3] = 1;
+	    puzzle[0][3] = 2; puzzle2[0][4] = 9;
+	    puzzle[0][4] = 5; puzzle2[0][7] = 6;
+	    puzzle[0][8] = 7; puzzle2[1][0] = 5;
+	    puzzle[1][1] = 4; puzzle2[1][6] = 9;
+	    puzzle[1][5] = 9; puzzle2[2][0] = 2;
+	    puzzle[2][2] = 8; puzzle2[2][3] = 6;
+	    puzzle[2][8] = 9; puzzle2[2][4] = 4;
+	    puzzle[3][0] = 4; puzzle2[3][1] = 8;
+	    puzzle[3][1] = 8; puzzle2[3][2] = 7;
+	    puzzle[3][5] = 1; puzzle2[3][7] = 5;
+	    puzzle[3][7] = 5; puzzle2[4][0] = 4;
+	    puzzle[4][2] = 3; puzzle2[4][4] = 8;
+	    puzzle[4][6] = 9; puzzle2[4][8] = 9;
+	    puzzle[5][1] = 6; puzzle2[5][1] = 6;
+	    puzzle[5][3] = 5; puzzle2[5][6] = 8;
+	    puzzle[5][7] = 2; puzzle2[5][7] = 2;
+	    puzzle[5][8] = 1; puzzle2[6][4] = 7;
+	    puzzle[6][0] = 6; puzzle2[6][5] = 3;
+	    puzzle[6][6] = 1; puzzle2[6][8] = 6;
+	    puzzle[7][3] = 1; puzzle2[7][2] = 9;
+	    puzzle[7][7] = 6; puzzle2[7][8] = 8;
+	    puzzle[8][0] = 2; puzzle2[8][1] = 4;
+	    puzzle[8][4] = 3; puzzle2[8][4] = 2;
+	    puzzle[8][5] = 7; puzzle2[8][5] = 8;
+	    puzzle[8][6] = 5;
+
+	    int[] ini = initxy(puzzle2);
+
+	    System.out.printf("\nSource: https://www.websudoku.com/?level=4\n\n\t\tUnsolved Sudoku Puzzle:\n\n");
+	    printPuzzle(puzzle2);
+
+	    System.out.printf("\n\t\tSolved Sudoku Puzzle:\n\n");
+	
+	    printPuzzle(expSudoku2(puzzle2, ini[0], ini[1]));
+	}
+
+	else{
+	    int[] ini = initxy(usrPuzzle);
+	    System.out.printf("\n\t\tUnsolved Sudoku Puzzle:\n\n");
+	    printPuzzle(usrPuzzle);
+	    System.out.printf("\n\t\tSolved Sudoku Puzzle:\n\n");
+	
+	    printPuzzle(expSudoku2(usrPuzzle, ini[0], ini[1]));
+	}
+	    
+	
+	
+    }
+    
+
+
+    public static int eulerTour(){
+
+	File file = new File("/home/sflash/Documents/Uni-stuff/summer-2019/cis2168/Jun20--Thursday/assign5/euler.txt");
+	//make sure to have euler.txt inside the CLASS path.
+
+	
+	String line;
+
+	int[][][] bigArray = new int[50][9][9];
+	int count = -1;
+
+	try{
+
+	    Scanner eu = new Scanner(file);
+
+	    while(eu.hasNextLine()){
+
+		count++;
+		eu.nextLine();
+		
+		for(int i = 0; i < 9; i++){
+		    line = eu.nextLine();
+		    for(int j = 0; j < 9; j++){
+			bigArray[count][i][j] = Character.getNumericValue(line.charAt(j));
+		    }
+		}	
+	    }
+	}
+	
+	
+	catch(FileNotFoundException abc){
+	    System.out.printf("try catch block failed\n");
+	    
+	}
+	
+	int[] start;
+	
+	for(int i = 0; i < 50; i++){
+
+	    
+
+	}
+	    
+	
+	return -1;
+    }
     
     
     public static void main(String[] args){
 
 	//suggest (0, 0) coordinates
 	//also ignore my x and y. This goes like wrapKnight(y, x)
-	//wrapKnight(1, 0);
-
-
-	//the wrap is a little unnecesary as my expSudoku1 method is capable of solving any sudoku puzzle.
-	//use: expSudoku1(puzzle, 0, 0). (the puzzle is a int[][] array that starts from top left).
-	wrapSudoku();
+	//wrapKnight(0, 0);
 	
+
+
+	//provide NULL for default puzzles (2 are coded). You can also feed it a puzzle.
+	//default puzzle: ~13k recursive cycles, puzzle2: 11068 cycles.
+	//exp2sudoWrap(null);
+
+	eulerTour();
 
     }
 
