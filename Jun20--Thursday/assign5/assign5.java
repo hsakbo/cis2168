@@ -455,15 +455,21 @@ public class assign5{
 	}
 	
 	int[] start;
+	int tmp =0;
+	int[][] sol;
 	
 	for(int i = 0; i < 50; i++){
 
-	    
+	    start = initxy(bigArray[i]);
+	    sol = expSudoku2(bigArray[i], start[0], start[1]);
+	    tmp += sol[0][0]*100 + sol[0][1] * 10 + sol[0][2];
 
 	}
+
+	//System.out.printf("%d\n", tmp);
 	    
 	
-	return -1;
+	return tmp;
     }
     
     
@@ -479,7 +485,10 @@ public class assign5{
 	//default puzzle: ~13k recursive cycles, puzzle2: 11068 cycles.
 	//exp2sudoWrap(null);
 
-	eulerTour();
+
+
+	//ANSWER: 24702
+	System.out.printf("%d\n", eulerTour());
 
     }
 
