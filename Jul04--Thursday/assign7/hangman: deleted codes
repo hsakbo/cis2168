@@ -1,0 +1,137 @@
+public static void play(int wIndex){
+
+	char[] sub = new char[len];
+	pCorrect(sub);
+	char c = kb.next().charAt(0);
+	char spCase = c;
+	
+	Set<Character> guesses = new HashSet<Character>();
+
+	//initial guesses
+	while(lifes >= 0){
+	    if(!mainList.get(wIndex).contains("" + c)){
+		lifes--;
+		System.out.printf("Wrong guess!\n");
+		guesses.add(c);
+	    
+		if(lifes >= 0){		    
+		    pCorrect(sub);
+		    System.out.printf("Guess again\n");
+		    c = kb.next().charAt(0);
+		}
+
+		else{
+		    System.out.printf("Game Over!\n");
+		    return;
+		}
+	    }
+
+	    else
+		break;
+	}
+	
+
+	for(int i = 0; i < len; i++){
+	    if(mainList.get(wIndex).charAt(i) == c){
+		sub[i] = c;
+		sols++;
+	    }
+	}
+
+	System.out.printf("Correct!\n");
+	pCorrect(sub);
+	
+	Set<String> hang = new HashSet<String>();
+	for(int i = 0; i < mainList.size(); i++){
+	    if(mainList.get(i).contains("" + c))
+		hang.add(mainList.get(i));
+	}
+
+	//initial pruning of combinations
+	Iterator<String> iterMain = hang.iterator();
+	Iterator<Character> iterC = guesses.iterator();
+	while(iterC.hasNext() && hang.size() > 2){
+	    c = iterC.next();
+	    while(iterMain.hasNext() && hang.size() > 2){
+		if(iterMain.next().contains("" + c))
+		    iterMain.remove();
+	    }
+	    iterMain = hang.iterator();
+	}
+			
+	
+	//initial pruning of permutations
+	for(int i = 0; i < len; i++){
+	    if(sub[i] == 0)
+		continue;
+	    
+	    while(iterMain.hasNext() && hang.size() > 2){
+		if(iterMain.next().charAt(i) != sub[i])   
+		    iterMain.remove();
+		
+	    }
+	    iterMain = hang.iterator();
+	}
+
+	//combination leftover(special case when the number of guessed letters are not constant)
+	//writing on a seperate block to make it more clear at the cost of tiny efficiency.
+	String tmp;
+	int count = 0;
+	while(iterMain.hasNext() && hang.size() > 2){
+	    tmp = iterMain.next();
+	    for(int i = 0; i < len; i++){
+		if(tmp.charAt(i) == spCase)
+		    count++;
+	    }
+	    if(spCase > sols)
+		iterMain.remove();
+	    count = 0;
+	}
+	    
+
+	for(String word: hang){
+	    System.out.printf("debug : %s\n", word);
+	}	
+	    
+        
+	while(lifes >= 0 && sols < len){
+	    hang = recall(sub, hang);
+	}
+
+	if(sols == len){
+	    System.out.printf("Congratulations, sorry for all the cheating! :p\n");
+	    return;
+	}
+
+	
+	System.out.printf("It's official, YOU SUCK!\n");
+	for(String word: hang){
+	    System.out.printf("the word: %s\n", word);
+	    break;
+	}
+	
+	return;
+	
+    }
+
+
+
+recall method:
+ for(String word: words)
+	    System.out.printf("debug: %s\n", word);
+	    
+	if(words.size() > 1){
+	    lifes--;
+	    System.out.printf("\nWRONG! lifes left: %d", lifes);
+	    return words;
+	}
+
+	System.out.printf("Correct!\n");
+	for(String word: words){
+	    for(int i = 0; i < len; i++){
+		if(word.charAt(i) == c){
+		    sub[i] = c;
+		    sols++;
+		}
+	    }
+	}
