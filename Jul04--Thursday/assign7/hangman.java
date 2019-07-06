@@ -1,6 +1,9 @@
 import java.util.*;
 import java.io.File;
 
+//to me: find the zero error
+//to professor: There is a small offset bug occuring. I don't have enough time to fully test and find out the problem.
+//overall, the game works solid. even with the offset, it will provide the most number of cheats it will
 public class hangman{
 
     static int len;
@@ -10,11 +13,12 @@ public class hangman{
     static int sols;
     static int remSig;
     static int key;
+    static LinkedList<Character> pressed;
 
     
     //the most complicated method:
     //gets rid of elements that contain c. HOWEVER;
-    //if the size of the subset of (word intersect (not c)) has a permutation larger OR EQUAL than (word intersect c):
+    //if the size of the subset of (word intersect (not c)) has a permutation larger (NOT EQUAL) than (word intersect c):
     //then it will return the subset.
     //remSig: 0 return word intersect c.
     //remSig: 1 if subset of word intersect (not c)
@@ -31,7 +35,7 @@ public class hangman{
 	}
 	
 	//strategic location for speeeed
-	if(notC.size() < words.size()){
+	if(notC.size() <= words.size()){
 	    remSig = 0;
 	    return words;
 	}//end of speed block
@@ -52,46 +56,56 @@ public class hangman{
 	int index, modulo;	
 	String tmpWord = "";
 	
-
+	
+	int[] binArr;
 	//i=1 because truncating the possibility of all 0s (no c)
 	for(int i = 1; i < binary; i++){
 
 	    modulo = i;
 	    index = len;	    	    
+	    binArr = new int[len];
 	    subSet = new HashSet<String>();
 
 	    while(modulo > 0){
-		index--;		
-		
-		if(modulo % 2 == 1){       
+		index--;
+		if(modulo % 2 == 1){
+		    binArr[index] = 1;
 		    iter = notC.iterator();
 		    while(iter.hasNext()){
 			tmpWord = iter.next();
 			if(tmpWord.charAt(index) == c)
 			    subSet.add(tmpWord);	
-		    }   
-		}		          	
+		    }
+		}
+		
+		else
+		    binArr[index] = 0;
+
 		modulo /= 2;
-	    } //end of while loop adding phase.
+	    }
 
-	    modulo = i;
-	    index = len;
-	    while(modulo > 0){
-		index--;
-
-		if(modulo % 2 == 0){
+	    
+	    for(int j = 0; j < len; j++){
+		if(binArr[j] == 0){
 		    iter = subSet.iterator();
 		    while(iter.hasNext()){
-			if(iter.next().charAt(index) == c)
+			if(iter.next().charAt(j) == c)
+			    iter.remove();
+		    }
+
+		}
+
+		else if(binArr[j] == 1){
+		    iter = subSet.iterator();
+		    while(iter.hasNext()){
+			if(iter.next().charAt(j) != c)
 			    iter.remove();
 		    }
 		}
-		modulo /= 2;
-	    } //end of while loop (Pruning phase)
-
-
+		
+	    }
 	    
-	    hash.put(i, subSet);	    	    
+	    hash.put(i, subSet);
 	}
 	
 	int size = 0;
@@ -106,7 +120,7 @@ public class hangman{
 	    }
 	}
 
-	if(size >= words.size()){
+	if(size > words.size()){
 	    remSig = 1;
 	    return subSet;
 	}
@@ -119,10 +133,13 @@ public class hangman{
     
     public static Set recall(char[] sub){
 
+	for(String word: words)
+	    System.out.printf("%s\n", word);
 	pCorrect(sub);				
 	System.out.printf("\nGuess the letter %d\n", words.size());
        
 	char c = kb.next().charAt(0);
+	pressed.add(c);
 
 	//contains in the substring check
 	for(int i = 0; i < sub.length; i++){
@@ -164,8 +181,8 @@ public class hangman{
 		}
 		key /= 2;
 	    }
-	    for(String word : words)
-		System.out.printf("%s\n", word);
+	    
+	
 	    
 	    return words;
 	    
@@ -190,11 +207,13 @@ public class hangman{
 		System.out.printf("_ ");
 
 	}
-	System.out.printf("\n\n");
+	System.out.printf("\n");
+	System.out.printf("Pressed: %s\n", pressed.toString());
     }
 	
     public static void play(){
 	char[] sub = new char[len];
+	pressed = new LinkedList<Character>();
 	
 	while(lifes >= 0 && sols < len){
 	    words = recall(sub);
