@@ -14,12 +14,17 @@ public class Rabbit extends Animal {
 
     private int goSafePlace(){
 	//rows and cols = 20
-	final int bf = 31415;
+	final int bf = 31415; //an arbitrary int which I know will be smaller to determine the direction under an algorithm to find the minimum.
 	
 	
+	//I basically need all these independent variables to map out the 8 possible directions along the foxFlag which is the direction of the fox
 	int foxFlag, bushFlag, wallFlag, nLen, eLen, wLen, sLen, neLen, seLen, swLen, nwLen;
 	foxFlag = bushFlag = wallFlag = nLen = eLen = wLen= sLen = neLen = seLen = swLen =  nwLen = bf;
 	int[] direction = new int[8];
+
+	//calculating the distances to wall, this is for the rabbit to seek the center of the board as oppose to going in random directions. I wanted to add some math and determine it on special cases but its too complicated as it is.
+
+	
 	for(int i = 0; i < 8; i++){
 	    direction[i] = look(i);
 	    switch (direction[i]){
@@ -66,6 +71,7 @@ public class Rabbit extends Animal {
 	}
 
 
+	//determining direction to the closest bush
 	int dir, bushLen = 21;
 	dir = Model.STAY;
 	for(int i = 0; i < 8; i++)
@@ -76,7 +82,9 @@ public class Rabbit extends Animal {
 			dir = i;
 		    }
 
+	//for iteration purposes
 	int[] arrConv = {nLen, neLen, eLen, seLen, sLen, swLen, wLen, nwLen};
+
 
 	
 	if(bushLen == 21)
@@ -92,17 +100,20 @@ public class Rabbit extends Animal {
 	
 
 
-
+	//parking algoritm call here
 	if(bushLen == 0)
 	    {		
 		return parking(dir);
 	    }
-        
+
 	
+	//returns whichever direction it chose either through by running away from the fox or parking algorithm call below.
+	//I dont call the escape algorithm here but on the decideMove()
 	return dir;
     }
 
     
+    //this algorithm determines the optimal position configuration for the rabbit to be in. I think this code is entirely redundant now as I changed my escape() function to deal with most scenarios. Either way it is still useful when I need to go back to the bush or the scenario where the fox sees rabbit from the start and manages to escape() which it can as it highly flexible on many scenarios if there is a bush.
     private int parking(int dir){
 	int tempV1, tempV2;
 	int count = 0;
@@ -111,7 +122,7 @@ public class Rabbit extends Animal {
 		count++;
 		
 	if (count < 5){
-	    
+	    //switch cases are coded for different bush configurations(now redundant).
 	    switch (dir){
 	    case Model.N:
 		tempV1 = look(Model.NE);
@@ -204,7 +215,7 @@ public class Rabbit extends Animal {
 	}
 
 	else if (count < 1 && count >=5)
-	    return Model.STAY; //give up and die
+	    return Model.STAY; //give up and die because no solution exists due to cornering with a wall prob.
 
   
 	return Model.STAY;
@@ -213,6 +224,7 @@ public class Rabbit extends Animal {
 
     
 
+    //main algorithm I call to evade fox. This takes precedence in the decideMove() above any other method.
     private int escape(){
 	int foxdir = 1000;
 	for (int i = 0; i<8; i++)
@@ -227,6 +239,9 @@ public class Rabbit extends Animal {
 	    }
 	}
 
+	//I encode a priority system: 0 means illegal move, 1 means legal, 2 means priority. ie if 2 is available, go there and not 1/
+
+	//same as above, I code for most scenarios with switch statements.
 	for(int i = 0; i < 8; i+=2){
 		
 	    if((look(i) == Model.BUSH) && !(canMove(i))){
@@ -368,18 +383,20 @@ public class Rabbit extends Animal {
     
     
     int decideMove(){
+
 	
-	int dist = 100;
+	int dist = 100; //100 is arbitrary. So long as it is larger than ehmm, max distance I guess?
 	
 	for(int i = 0; i < 8; i++)
 	    if(look(i) == Model.FOX)
 		dist = distance(i) - 1;
-        
+
+	//give precedence to escape algorithm if fox is within 2 blocks away and is visible
 	if (dist < 3){
 	    return escape();
 	}
 	
-	
+	//else just go to a safe place
 	return goSafePlace();
 	
 	

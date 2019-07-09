@@ -1,9 +1,8 @@
 import java.util.*;
 import java.io.File;
 
-//to me: find the zero error
-//to professor: There is a small offset bug occuring. I don't have enough time to fully test and find out the problem.
-//overall, the game works solid. even with the offset, it will provide the most number of cheats it will
+
+
 public class hangman{
 
     static int len;
@@ -104,10 +103,12 @@ public class hangman{
 		}
 		
 	    }
-	    
+
+	    //subSet is now ready to be inserted with the key i (indexes that contain c).
 	    hash.put(i, subSet);
 	}
-	
+
+	//code below compares subStrings in hash and see if it is suitable to return.
 	int size = 0;
 	Set<String> subs;
 	key = 0;
@@ -130,13 +131,13 @@ public class hangman{
     }
 
 
-    
+    //initially wanted to call recursively, hence the name. I forgot midway this was a recursive function, so I decided to just go with it being normal.
     public static Set recall(char[] sub){
 
-	for(String word: words)
-	    System.out.printf("%s\n", word);
+	//for(String word: words)
+	// System.out.printf("%s\n", word);
 	pCorrect(sub);				
-	System.out.printf("\nGuess the letter %d\n", words.size());
+	System.out.printf("\nGuess the letter %d, lifes: %d\n", words.size(), lifes);
        
 	char c = kb.next().charAt(0);
 	pressed.add(c);
@@ -191,7 +192,7 @@ public class hangman{
 	lifes--;
 	System.out.printf("WRONG! lifes left: %d\n\n", lifes);			
 	return words;
-       
+	
     }
 
 
@@ -210,11 +211,15 @@ public class hangman{
 	System.out.printf("\n");
 	System.out.printf("Pressed: %s\n", pressed.toString());
     }
-	
+
+    
+
+    //extra prints and calls the recall()
     public static void play(){
 	char[] sub = new char[len];
 	pressed = new LinkedList<Character>();
 	
+	sols = 0;
 	while(lifes >= 0 && sols < len){
 	    words = recall(sub);
 	}
@@ -236,6 +241,8 @@ public class hangman{
     
     public static void main(String[] args){
 
+	char rep = 0;
+	do{
 	System.out.printf("\n\n Let's Play A Game of Hangman\n\n");
 	words = new HashSet<String>();
 	System.out.printf("Enter the length of the word\n");
@@ -251,6 +258,7 @@ public class hangman{
 		if(word.length() == len)
 		    words.add(word);
 	    }
+	    sc.close();
 	}
 	catch(Exception e){
 	    System.out.printf("try block fail\n");
@@ -260,22 +268,23 @@ public class hangman{
 
 	if(words.isEmpty()){
 	    System.out.printf("invalid length\n");
+	    kb.close();
 	    return;
 	}
 
 	System.out.printf("Enter the number of wrong guesses\n");
 	lifes = kb.nextInt();
 
-	//Random rand = new Random();
-	//int wordIndex = rand.nextInt(mainList.size());
-	System.out.printf("\n\nA word has been chosen, take a guess\n\n");
-
 	
-
+	System.out.printf("\n\nA word has been chosen, take a guess\n\n");
 	
 	play();
-
+	System.out.printf("wanna play again? (y or n) \n");
+	rep = kb.next().toLowerCase().charAt(0);
 	
+	}while (rep == 'y');
+	
+	kb.close();//kinda redundant because most modern os free orphaned memory. But it's apparently "good practice".
     }
 }
 

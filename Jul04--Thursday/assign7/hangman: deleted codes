@@ -113,7 +113,7 @@ public static void play(int wIndex){
 	return;
 	
     }
-
+    
 
 
 recall method:
@@ -135,3 +135,85 @@ recall method:
 		}
 	    }
 	}
+
+
+
+remove method:
+cross = new ArrayList<Set<String>>();
+	    for(int j = 0; j < len; j++)
+		cross.add(null);
+	    /* under revision.
+	    while(modulo > 0){
+		index--;		
+		
+		if(modulo % 2 == 1){
+		    binArr[index] = 1;
+		    iter = notC.iterator();
+		    while(iter.hasNext()){
+			tmpWord = iter.next();
+			if(tmpWord.charAt(index) == c)
+			    subSet.add(tmpWord);	
+		    }   
+		}		          	
+		modulo /= 2;
+	    } //end of while loop adding phase.
+
+	    
+	    
+	    
+	    modulo = i;
+	    index = len;
+	    while(modulo > 0){
+		index--;
+
+		if(modulo % 2 == 0){
+		    iter = subSet.iterator();
+		    while(iter.hasNext()){
+			if(iter.next().charAt(index) == c)
+			    iter.remove();
+		    }
+		}
+		modulo /= 2;
+	    } //end of while loop (Pruning phase)
+	    */
+
+	    
+
+	    while(modulo > 0){
+		index--;		
+		subSet = new HashSet<String>();
+		if(modulo % 2 == 1){
+		    
+		    iter = notC.iterator();
+		    while(iter.hasNext()){
+			tmpWord = iter.next();
+			if(tmpWord.charAt(index) == c)
+			    subSet.add(tmpWord);	
+		    }   
+		    cross.set(index, subSet);
+		    
+		}
+
+		modulo /= 2;
+	    } //end of while loop adding phase.
+
+	    
+	    //set logic, pruning with intersections.
+	    for(int j = 0; j < len; j++){
+
+		//initialising
+		if(tmpSet == null){
+		    if(cross.get(j) == null)
+			continue;
+
+		    tmpSet = cross.get(j);
+		    continue;
+		}
+
+		//actual logic
+		if(!(cross.get(j) == null)){
+		    tmpSet.retainAll(cross.get(j));
+		    
+		}	
+		
+	    }
