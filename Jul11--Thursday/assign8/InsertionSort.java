@@ -1,6 +1,6 @@
 package sortings;
 
-//retArr is long[2]
+//retArr is int[2]
 //retArr[0] == number of comparisons.
 //retArr[1] == number of exchanges with the sorting array.
 
@@ -20,9 +20,9 @@ public class InsertionSort{
 
     
     
-    public long[] sort(){
+    public int[] sort(){
 
-	long[] retArr = new long[2];	
+	int[] retArr = new int[2];	
 	int[] aux = new int[2];
 	int count;
 			

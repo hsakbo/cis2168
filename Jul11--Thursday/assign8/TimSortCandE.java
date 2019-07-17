@@ -157,8 +157,9 @@ public class TimSortCandE extends TimSortTime{
 
 	    while(arr[count] <= arr[count+1]){
 		CE[0] += 2;
-		if(count < size - 1)
-		    count++;
+		count++;
+		if(count == size - 1)
+		    break;
 	    }
 
 	    CE[0] += 2;
@@ -184,8 +185,9 @@ public class TimSortCandE extends TimSortTime{
 	    
 	    while(arr[count] > arr[count+1]){		
 		CE[0] += 2;
-		if(count < size)
-		    count++;    
+		count++;
+		if(count == size-1)
+		    break;    
 	    }
 
 	    CE[0] += 2;

@@ -214,14 +214,15 @@ public class TimSortTime{
 	int[] insta;
 
 	size = this.size - 1;
-
+	int timeSave = size-1;
+	
 	while(count < size){
 	    
 	    aux = count;	   	    	    
-
 	    while(arr[count] <= arr[count+1]){		
-		if(count < size - 1)
-		    count++;
+		count++;
+		if(count == timeSave)
+		    break;				
 	    }
 	    
 	    if(count-aux != 0){
@@ -248,8 +249,10 @@ public class TimSortTime{
 	    }
 	    
 	    while(arr[count] > arr[count+1]){		
-		if(count < size)
-		    count++;    
+		count++;		
+		if(count == timeSave)
+		    break;
+		
 	    }
 
 	    if(count-aux != 0){		
